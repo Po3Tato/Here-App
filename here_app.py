@@ -2,6 +2,7 @@
 # and python-docx[Interact with the document]
 # will be the modules used
 # here_app.py
+import os  # Import the os module
 from docx import Document
 from gui_module import create_app
 
@@ -19,7 +20,11 @@ def action_on_input(value, label):
     else:
         label.config(text="Done! You may now close the application.")
 
-app = create_app(action_on_input)
+# Get the document name from the document path
+doc_name = os.path.basename(doc_path)
+
+# Pass the document name as the second argument to create_app
+app = create_app(action_on_input, doc_name)
 
 def update_student():
     global student_row_number
