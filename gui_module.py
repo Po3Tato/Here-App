@@ -46,4 +46,5 @@ class HereApp:
 def create_app(action_on_input, doc_name):  # Updated function signature to include doc_name
     window = tk.Tk()
     app = HereApp(window, action_on_input, doc_name)  # Pass doc_name to HereApp
+    
     return app
