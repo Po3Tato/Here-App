@@ -2,37 +2,55 @@
 # and python-docx[Interact with the document]
 # will be the modules used
 # here_app.py
-import os  # Import the os module
+import os
 from docx import Document
 from gui_module import create_app
 
-# Path of file. Change later [refer to notes on Notion]
-doc_path = 'E://NO//CODE//projects//Here-App//class_attendance.docx'
-doc = Document(doc_path)
-table = doc.tables[0]
-student_row_number = 1
+class AttendanceApp:
+    def __init__(self):
+        self.doc = None
+        self.table = None
+        self.doc_path = None  # Keep track of the current document path
+        self.student_row_number = 0
+        self.app = create_app(self.action_on_upload, self.action_on_button_press)
 
-def action_on_input(value, label):
-    global student_row_number
-    if student_row_number < len(table.rows):
-        student_row_number += 1  # increment used for next student
-        update_student()  # update label with next student name
-    else:
-        label.config(text="Done! You may now close the application.")
+    def run(self):
+        self.app.update_label("Upload Attendance Document")
+        self.app.window.mainloop()
 
-# Get the document name from the document path
-doc_name = os.path.basename(doc_path)
+    def action_on_upload(self, file_path):
+        self.doc = Document(file_path)
+        self.doc_path = file_path  # Save the document's path
+        self.table = self.doc.tables[0]
+        self.student_row_number = 1  # Start at the first student row
+        self.update_student_label()
 
-# Pass the document name as the second argument to create_app
-app = create_app(action_on_input, doc_name)
+    def action_on_button_press(self, is_present):
+        if self.student_row_number < len(self.table.rows):
+            if not is_present:  # Only mark "Absent" if the button pressed corresponds to absence
+                self.table.cell(self.student_row_number, 1).text = 'Absent'
+            
+            # Move to the next student regardless of presence
+            self.student_row_number += 1
+            self.update_student_label()
+        else:
+            self.save_document()  # Automatically save the document when done
 
-def update_student():
-    global student_row_number
-    if student_row_number < len(table.rows):
-        student_name = table.cell(student_row_number, 0).text
-        app.update_label(student_name)
-    else:
-        app.update_label("Done! You may now close the application.")
+    def update_student_label(self):
+        # Check if there are more students to process
+        if self.student_row_number < len(self.table.rows):
+            student_name = self.table.cell(self.student_row_number, 0).text
+            self.app.update_label(student_name)
+        else:
+            # No more students left to process, automatically save the document and notify the user
+            self.save_document()
+            self.app.update_label("Attendance marking complete. The document has been saved.")
 
-update_student()
-app.run()
+    def save_document(self):
+        if self.doc_path:  # Check if a document is loaded
+            self.doc.save(self.doc_path)  # Save the document
+            self.app.update_label("Document saved: " + os.path.basename(self.doc_path))
+
+if __name__ == "__main__":
+    attendance_app = AttendanceApp()
+    attendance_app.run()

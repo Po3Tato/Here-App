@@ -1,50 +1,68 @@
 # gui_module.py
 import tkinter as tk
-from tkinter import font  # Import the font module
+from tkinter import filedialog, font  # Import additional tkinter modules for file dialog and font customization
+import os  # Import os module for path operations
 
+# Define the HereApp class to represent the GUI application
 class HereApp:
-    def __init__(self, window, action_on_input, doc_name):
-        self.window = window
-        self.window.title("Here App")
-        self.window.geometry("300x250")  # Set window size
-        
-        self.action_on_input = action_on_input
-        
-        # Configure rows and columns to expand
-        self.window.grid_rowconfigure(0, weight=1)  # This will push row 1 to the center
-        self.window.grid_rowconfigure(2, weight=1)  # This will push row 1 to the center
-        self.window.grid_rowconfigure(3, weight=1)  # This will push row 1 to the center
-        self.window.grid_columnconfigure(0, weight=1)  # This will push columns 0 and 1 to the center
-        self.window.grid_columnconfigure(1, weight=1)  # This will push columns 0 and 1 to the center
-        
-        # Remove the .docx extension from the document name
-        doc_name_no_extension = doc_name.replace('.docx', '')
-        
-        self.doc_label = tk.Label(self.window, text=doc_name_no_extension)  # Label to hold the document name
-        self.doc_label.grid(row=0, column=0, columnspan=2, sticky=tk.NSEW)  # Position the document name label
-        
-        # Set a larger font size for the label
-        label_font = font.Font(size=20)  # Set font size to 20 
-        self.label = tk.Label(self.window, font=label_font, wraplength=150)  # Set wraplength to 200 pixels
-        self.label.grid(row=1, column=0, columnspan=2, sticky=tk.NSEW)  # Center the label
-        
-        self.one_button = tk.Button(self.window, text="Here", command=lambda: self.on_button(1))  # Text changed to "Here"
-        self.one_button.grid(row=2, column=0, sticky=tk.NSEW, padx=8, pady=8)  # Stretch button
-        
-        self.zero_button = tk.Button(self.window, text="Absent", command=lambda: self.on_button(0))  # Text changed to "Absent"
-        self.zero_button.grid(row=2, column=1, sticky=tk.NSEW, padx=8, pady=8)  # Stretch button
-        
-    def on_button(self, value):
-        self.action_on_input(value, self.label)
+    # Initialize the HereApp instance with window, update document callback, and update student callback
+    def __init__(self, window, update_document_callback, update_student_callback):
+        self.window = window  # The main window of the application
+        self.window.title("Here App")  # Title of the window
+        self.window.geometry("300x250")  # Size of the window
 
+        # Save the callbacks for later use
+        self.update_document_callback = update_document_callback
+        self.update_student_callback = update_student_callback
+
+        # Create a label widget for instructions
+        self.label = tk.Label(window, text="Please upload a Class Attendance Sheet", wraplength=250)
+        self.label.pack(pady=20)  # Place the label in the window with padding
+
+        # Create an upload button widget
+        self.upload_button = tk.Button(window, text="Upload Document", command=self.upload_document)
+        self.upload_button.pack(pady=10)  # Place the button in the window with padding
+
+        # Create a label widget for showing the current student's name or status messages
+        self.student_label = tk.Label(window, text="", font=font.Font(size=14), wraplength=250)
+        self.student_label.pack(pady=10)  # Place the label in the window with padding
+
+        # Create a button widget for marking attendance as present
+        self.present_button = tk.Button(window, text="Present", command=lambda: self.mark_attendance(1))
+        self.present_button.pack(side=tk.LEFT, expand=True, padx=20, pady=20)  # Make the button fill available space
+
+        # Create a button widget for marking attendance as absent
+        self.absent_button = tk.Button(window, text="Absent", command=lambda: self.mark_attendance(0))
+        self.absent_button.pack(side=tk.RIGHT, expand=True, padx=20, pady=20)  # Make the button fill available space
+
+    # Method to update the displayed document name
+    def set_document_name(self, file_path):
+        # Extract and display the document name without its file extension
+        document_name = os.path.basename(file_path)
+        document_name_no_extension = os.path.splitext(document_name)[0]
+        self.label.config(text=document_name_no_extension)
+
+    # Method to open a file dialog for document upload and process the selected file
+    def upload_document(self):
+        # Prompt the user to select a .docx file
+        file_path = filedialog.askopenfilename(filetypes=[("Word Documents", "*.docx")])
+        if file_path:  # Check if the user has selected a file
+            # Trigger the update document callback with the selected path
+            self.update_document_callback(file_path)
+            # Update the label to show the name of the uploaded document
+            self.set_document_name(file_path)
+
+    # Method to update the student label text
     def update_label(self, text):
-        self.label.config(text=text)
+        self.student_label.config(text=text)  # Set the label text to the provided string
 
-    def run(self):
-        self.window.mainloop()
+    # Method to handle attendance marking action
+    def mark_attendance(self, presence):
+        # Notify the main app logic of the student's presence or absence
+        self.update_student_callback(presence)
 
-def create_app(action_on_input, doc_name):  # Updated function signature to include doc_name
+# Factory function to create and return a new instance
+def create_app(update_document_callback, update_student_callback):
     window = tk.Tk()
-    app = HereApp(window, action_on_input, doc_name)  # Pass doc_name to HereApp
-    
+    app = HereApp(window, update_document_callback, update_student_callback)
     return app
