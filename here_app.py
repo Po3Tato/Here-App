@@ -7,7 +7,7 @@ from docx import Document
 from gui_module import create_app
 
 # Path of file. Change later [refer to notes on Notion]
-doc_path = 'E://NO//CODE//projects//here-app-repo//class_attendance.docx'
+doc_path = 'E://NO//CODE//projects//Here-App//class_attendance.docx'
 doc = Document(doc_path)
 table = doc.tables[0]
 student_row_number = 1
