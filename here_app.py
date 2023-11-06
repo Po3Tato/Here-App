@@ -6,7 +6,7 @@ import os
 from docx import Document
 from gui_module import create_app
 
-class AttendanceApp:
+class HereApp:
     def __init__(self):
         self.doc = None
         self.table = None
@@ -52,5 +52,5 @@ class AttendanceApp:
             self.app.update_label("Document saved: " + os.path.basename(self.doc_path))
 
 if __name__ == "__main__":
-    attendance_app = AttendanceApp()
+    attendance_app = HereApp()
     attendance_app.run()
