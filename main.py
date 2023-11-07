@@ -4,7 +4,7 @@
 # here_app.py
 import os
 from docx import Document
-from gui_module import create_app
+from gui import create_app
 
 class HereApp:
     def __init__(self):
@@ -15,7 +15,7 @@ class HereApp:
         self.app = create_app(self.action_on_upload, self.action_on_button_press)
 
     def run(self):
-        self.app.update_label("Upload Attendance Document")
+        self.app.update_label('Upload Attendance Document')
         self.app.window.mainloop()
 
     def action_on_upload(self, file_path):
@@ -44,13 +44,13 @@ class HereApp:
         else:
             # No more students left to process, automatically save the document and notify the user
             self.save_document()
-            self.app.update_label("Attendance marking complete. The document has been saved.")
+            self.app.update_label('Attendance marking complete. The document has been saved.')
 
     def save_document(self):
         if self.doc_path:  # Check if a document is loaded
             self.doc.save(self.doc_path)  # Save the document
-            self.app.update_label("Document saved: " + os.path.basename(self.doc_path))
+            self.app.update_label('Document saved: ' + os.path.basename(self.doc_path))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     attendance_app = HereApp()
     attendance_app.run()
