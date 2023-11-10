@@ -9,7 +9,7 @@ class HereApp:
     def __init__(self, window, update_document_callback, update_student_callback):
         self.window = window  # The main window of the application
         self.window.title('Here App')  # Title of the window
-        self.window.geometry('350x300')  # Size of the window
+        self.window.geometry('420x340')  # Size of the window
 
         # Save the callbacks for later use
         self.update_document_callback = update_document_callback
@@ -19,8 +19,11 @@ class HereApp:
         self.label = tk.Label(window, text='Please upload Class Attendance Sheet', wraplength=250)
         self.label.pack(pady=20)  # Place the label in the window with padding
 
+        # Create font size for buttons
+        button_font = font.Font(family='Helvetica', size=14, weight='bold')
+
         # Create an upload button widget
-        self.upload_button = tk.Button(window, text='Upload Document', command=self.upload_document,  height = 3, width = 15)
+        self.upload_button = tk.Button(window, text='Upload Document', command=self.upload_document,  height = 3, width = 15, font=button_font)
         self.upload_button.pack(pady=10)  # Place the button in the window with padding
 
         # Create a label widget for showing the current student's name or status messages
@@ -28,11 +31,11 @@ class HereApp:
         self.student_label.pack(pady=10)  # Place the label in the window with padding
 
         # Create a button widget for marking attendance as present
-        self.present_button = tk.Button(window, text='Present', command=lambda: self.mark_attendance(1), height = 3, width = 10)
+        self.present_button = tk.Button(window, text='Present', command=lambda: self.mark_attendance(1), height = 3, width = 10, bg='green', font=button_font)
         self.present_button.pack(side=tk.LEFT, expand=True, padx=5, pady=10)
 
         # Create a button widget for marking attendance as absent
-        self.absent_button = tk.Button(window, text='Absent', command=lambda: self.mark_attendance(0), height = 3, width = 10)
+        self.absent_button = tk.Button(window, text='Absent', command=lambda: self.mark_attendance(0), height = 3, width = 10, bg='red', font=button_font)
         self.absent_button.pack(side=tk.RIGHT, expand=True, padx=5, pady=10)
 
     # Method to update the displayed document name
