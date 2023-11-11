@@ -15,7 +15,7 @@ Before running the application, ensure you have Python installed on your system.
 
 `pip install -r requirements.txt`
 
-Usage
+## Usage
 
 To start the application, run the main.py file:
 
@@ -29,7 +29,7 @@ Once the application starts, follow these steps:
 - The application will automatically proceed to the next student.
 - Once all students have been marked, the application will save the document and display a confirmation message.
 
-How It Works
+## How It Works
 
 - gui.py contains the HereApp class which sets up the GUI.
 - main.py contains the application logic, including document handling and attendance marking.
