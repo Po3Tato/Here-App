@@ -1,0 +1,2 @@
+# Install these dependencies to use the application
+python-docx
