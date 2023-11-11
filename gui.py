@@ -1,4 +1,5 @@
-# gui_module.py
+# Import needed modules. tkinter[GUI interface]
+# gui.py
 import tkinter as tk
 from tkinter import filedialog, font  # Import additional tkinter modules for file dialog and font customization
 import os  # Import os module for path operations

@@ -1,7 +1,6 @@
-# import needed modules. tkinter[GUI interface]
-# and python-docx[Interact with the document]
-# will be the modules used
-# here_app.py
+# Import python-docx[Interact with the document]
+# Will be the modules used
+# main.py
 import os
 from docx import Document
 from gui import create_app
