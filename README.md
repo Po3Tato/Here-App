@@ -19,7 +19,7 @@ Before running the application, ensure you have Python installed on your system.
 
 ## Usage
 
-To start the application, run the main.py file:
+To start the application, run the main.p(go into the folder where it is located) file:
 
 `python main.py`
 
@@ -30,9 +30,3 @@ Once the application starts, follow these steps:
 - Use the "Present" or "Absent" buttons to mark the attendance for the displayed student name.
 - The application will automatically proceed to the next student.
 - Once all students have been marked, the application will save the document and display a confirmation message.
-
-## How It Works
-
-- gui.py contains the HereApp class which sets up the GUI.
-- main.py contains the application logic, including document handling and attendance marking.
-- The HereApp class in main.py is responsible for interacting with the file and updating the GUI accordingly.
