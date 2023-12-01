@@ -4,6 +4,10 @@ Here App is a simple GUI application for marking attendance in a `.docx` documen
 - I wrote it for a professor as I saw him spend alot of time copying and pasting absent every time. This felt and was a waste of time as it will take about 10mins or more.
 - The app/script name "Here" is what the professor will want us to reply to when a student is called. So I thought it will fit the script name.
 
+<p align="center">
+  <img src="./here_app_interface.png" alt="Here App">
+</p>
+
 ## Features
 
 - Upload `.docx` files containing attendance sheets.
