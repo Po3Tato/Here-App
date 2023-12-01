@@ -59,16 +59,10 @@ class HereApp:
     # Get today's date in the format "Dec 1"
         today_date_str = datetime.now().strftime("%b %d").replace(" 0", " ")
 
-    # Print the generated date string for debugging
-        print("Generated Date String:", today_date_str)
-
     # Iterate through all cells in the first row
         header_row = self.table.rows[0]
         for idx, cell in enumerate(header_row.cells):
             cell_text = cell.text.strip()
-
-        # Print each header cell content for debugging
-            print(f"Header Cell {idx} Content: {cell.text}")
 
             if today_date_str in cell_text:
                 return idx
