@@ -1,7 +1,7 @@
 # Here App
 
 Here App is a simple GUI application for marking attendance in a `.docx` document. It allows users to upload a class attendance sheet, display each student's name, and mark them as present or absent with the click of a button. The application is built using Python with `tkinter` for the GUI interface and `python-docx` for interacting with Word documents.
-- I wrote it for a professor as I saw him spend alot of time copying and pasting absent every time. This felt and was a waste of time as it will take about 10mins or more.
+- I wrote it for a professor as I saw him struggle and spend alot of time during roll call. I made this with his permission so he can try it out and use
 - The app/script name "Here" is what the professor will want us to reply to when a student is called. So I thought it will fit the script name.
 
 <p align="center">
