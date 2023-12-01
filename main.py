@@ -10,8 +10,6 @@ class HereApp:
         self.window = window
         self.window.title('Here App')
         self.window.geometry('520x480')
-        icon_path = 'here_app_logo.ico'
-        self.window.iconbitmap(icon_path)
 
         self.update_document_callback = update_document_callback
         self.update_student_callback = update_student_callback
@@ -57,24 +55,25 @@ class HereApp:
         self.update_label('Upload Attendance Document')
         self.window.mainloop()
 
-    def find_date_column(self, date_str):
-        # Find the column index corresponding to the given date string in the header row
+    def find_today_date_column(self):
+    # Get today's date in the format "Dec 1"
+        today_date_str = datetime.now().strftime("%b %d").replace(" 0", " ")
+
+    # Print the generated date string for debugging
+        print("Generated Date String:", today_date_str)
+
+    # Iterate through all cells in the first row
         header_row = self.table.rows[0]
         for idx, cell in enumerate(header_row.cells):
-            if cell.text.strip() == date_str:
-                return idx
-            
-        # If the date is not formatted properly, use abbreviations of the month and today's date
-        fallback_date_str = datetime.now().strftime("%b %d").lstrip("0")
-        for idx, cell in enumerate(header_row.cells):
-            if cell.text.strip() == fallback_date_str:
-                return idx
+            cell_text = cell.text.strip()
 
-        day_only_str = datetime.now().strftime("%d").lstrip("0")
-        for idx, cell in enumerate(header_row.cells):
-            if cell.text.strip() == day_only_str:
+        # Print each header cell content for debugging
+            print(f"Header Cell {idx} Content: {cell.text}")
+
+            if today_date_str in cell_text:
                 return idx
         return None
+
 
     def action_on_upload(self, file_path):
         # Perform actions when a document is uploaded
@@ -88,7 +87,7 @@ class HereApp:
         today = datetime.now()
         formatted_date = today.strftime("%B %d").lstrip("0")
 
-        self.date_column_number = self.find_date_column(formatted_date)
+        self.date_column_number = self.find_today_date_column()
 
         if self.date_column_number is not None:
             self.student_row_number = 1
