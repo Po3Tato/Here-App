@@ -6,7 +6,7 @@ from datetime import datetime
 
 class HereApp:
     def __init__(self, window, update_document_callback, update_student_callback):
-        # Initialize the HereApp instance
+        # Initialize the HereApp gui box
         self.window = window
         self.window.title('Here App')
         self.window.geometry('520x480')
@@ -15,18 +15,17 @@ class HereApp:
         self.update_student_callback = update_student_callback
 
         label_font = font.Font(family='Helvetica', size=14, weight='bold')
-
         # Create and configure the main label
         self.label = tk.Label(window, text='Upload Class Attendance Sheet', height=3, width=40, font=label_font)
         self.label.pack(expand=True, padx=15, pady=10)
 
         student_font = font.Font(family='Helvetica', size=28, weight='bold')
-        # Create and configure the label for student information
+        # Create and configure the label for student names
         self.student_label = tk.Label(window, text='', font=student_font, wraplength=400)
         self.student_label.pack(padx=5, pady=5)
 
         button_font = font.Font(family='Helvetica', size=14, weight='bold')
-        # Create a frame for buttons
+        # Create frame for buttons
         self.button_frame = tk.Frame(window)
         self.button_frame.pack(side=tk.BOTTOM, pady=10)
 
@@ -40,11 +39,10 @@ class HereApp:
         self.upload_button = tk.Button(window, text='Upload Document', command=self.upload_document, height=3, width=15, font=button_font)
         self.upload_button.pack(side=tk.BOTTOM, pady=5)
 
-        # Create a label for credits
         self.name_label = tk.Label(window, text='made by jude :)')
         self.name_label.place(relx=1.0, rely=1.0, x=-10, y=-10, anchor='se')
 
-        # Initialize variables to store document information
+        # Variables to store document information
         self.doc = None
         self.table = None
         self.doc_path = None
@@ -56,21 +54,21 @@ class HereApp:
         self.window.mainloop()
 
     def find_today_date_column(self):
-    # Get today's date in the format "Dec 1"
+    # Get today's date in the format "Jan 1" and "JAN 1"
         today_date_str = datetime.now().strftime("%b %d").replace(" 0", " ")
+        uppercased_today_date_str = today_date_str.upper()
 
-    # Iterate through all cells in the first row
+    # Checks through all cells in the first row
         header_row = self.table.rows[0]
-        for idx, cell in enumerate(header_row.cells):
+        for date, cell in enumerate(header_row.cells):
             cell_text = cell.text.strip()
 
-            if today_date_str in cell_text:
-                return idx
+            if today_date_str in cell_text or uppercased_today_date_str in cell_text:
+                return date
         return None
 
-
     def action_on_upload(self, file_path):
-        # Perform actions when a document is uploaded
+        # Actions when document is uploaded
         if not (file_path.endswith('.doc') or file_path.endswith('.docx')):
             self.update_label('Wrong Document type uploaded')
             return
@@ -79,7 +77,7 @@ class HereApp:
         self.doc_path = file_path
         self.table = self.doc.tables[0]
         today = datetime.now()
-        formatted_date = today.strftime("%B %d").lstrip("0")
+        formatted_date = today.strftime("%b %d").lstrip("0")
 
         self.date_column_number = self.find_today_date_column()
 
@@ -90,7 +88,7 @@ class HereApp:
             self.update_label(f"Date {formatted_date} not found in document")
 
     def action_on_button_press(self, is_present):
-        # Perform actions when a button is pressed
+        # Actions when a button is pressed
         if self.student_row_number < len(self.table.rows):
             if not is_present:
                 self.table.cell(self.student_row_number, self.date_column_number).text = 'Absent'
@@ -107,13 +105,13 @@ class HereApp:
             self.update_label(student_name)
         else:
             self.save_document()
-            self.update_label('Attendance marking complete. The document has been saved.')
+            self.update_label('Attendace Complete')
 
     def save_document(self):
         # Save the modified document
         if self.doc_path:
             self.doc.save(self.doc_path)
-            self.update_label('Document saved: ' + os.path.basename(self.doc_path))
+            self.update_label('Document saved')
 
     def set_document_name(self, file_path):
         # Set the label with the document name
@@ -122,7 +120,7 @@ class HereApp:
         self.label.config(text=document_name_no_extension)
 
     def upload_document(self):
-        # Prompt the user to select a .docx or .doc file
+        # Prompts the user to select file
         file_path = filedialog.askopenfilename(filetypes=[('Word Documents', '*.docx'), ('Word Document', '.doc')])
         if file_path:
             self.action_on_upload(file_path)
@@ -133,23 +131,21 @@ class HereApp:
         self.student_label.config(text=text)
 
     def mark_attendance(self, presence):
-        # Callback function for marking attendance
         self.update_student_callback(presence)
 
 
-def create_app(window, update_document_callback, update_student_callback):
+def application(window, update_document_callback, update_student_callback):
     app = HereApp(window, update_document_callback, update_student_callback)
     return app
 
 if __name__ == '__main__':
     window = tk.Tk()
-    attendance_app = create_app(window, None, None)
+    here_app = application(window, None, None)
 
-    # Define the callback functions after creating the instance
-    update_document_callback = lambda file_path: attendance_app.action_on_upload(file_path)
-    update_student_callback = lambda is_present: attendance_app.action_on_button_press(is_present)
+    update_document_callback = lambda file_path: here_app.action_on_upload(file_path)
+    update_student_callback = lambda is_present: here_app.action_on_button_press(is_present)
 
-    attendance_app.update_document_callback = update_document_callback
-    attendance_app.update_student_callback = update_student_callback
+    here_app.update_document_callback = update_document_callback
+    here_app.update_student_callback = update_student_callback
 
-    attendance_app.run()
+    here_app.run()
